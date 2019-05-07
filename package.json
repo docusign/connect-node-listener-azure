@@ -1,0 +1,14 @@
+{
+  "name": "connect-node-listener-azure",
+  "version": "1.0.0",
+  "description": "Receive notification messages with Azure Functions and Node.js",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "DocuSign",
+  "license": "MIT",
+  "dependencies": {
+    "@azure/service-bus": "^1.0.0-preview.3"
+  }
+}
