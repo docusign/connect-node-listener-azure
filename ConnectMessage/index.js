@@ -8,6 +8,7 @@
  * BASIC_AUTH_PW
  * HMAC_1 -- the HMAC secret for HMAC signature 1. Can be omitted if HMAC not configured
  * SVC_BUS_CONNECTION_STRING 
+ * SVC_BUS_QUEUE_NAME
  * 
  * References
  * Azure Functions JS Developer Guide: https://docs.microsoft.com/en-us/azure/azure-functions/functions-reference-node
@@ -17,8 +18,7 @@ const crypto = require('crypto')
     , { ServiceBusClient } = require("@azure/service-bus")  // See https://github.com/Azure/azure-sdk-for-js/tree/master/sdk/servicebus/service-bus/
     ;
 
-const queueName = "dsconnect" // Set in the Azure portal
-    , debug = true;
+const debug = true;
 
 const sleep = (milliseconds) => {
     return new Promise(resolve => setTimeout(resolve, milliseconds))
@@ -39,7 +39,6 @@ module.exports = async function _connectNotificationMessage (context, req) {
             ;
         return authenticated
     }
-    
     
     debugLog(`Started!. Invocation ID: ${invocationId}`);
     // Check Basic Authentication 
@@ -68,7 +67,12 @@ module.exports = async function _connectNotificationMessage (context, req) {
             ;
         hmacPassed = checkHmac(hmac1, rawXML, authDigest, accountIdHeader, hmacSig1)
         if (!hmacPassed) {
-            context.log.error(`${new Date().toUTCString()} HMAC did not pass!!`);
+            context.log.error(`HMAC did not pass!! HMAC Sig 1: ${hmacSig1}`);
+            context.res = {status: 401, body: "Bad HMAC: unauthorized!"};
+            return // EARLY return      
+        }
+        if (hmacPassed){
+            debugLog('HMAC passed!')
         }
     } else {
         // hmac is not configured or a test message. HMAC is not checked for tests.
@@ -85,14 +89,14 @@ module.exports = async function _connectNotificationMessage (context, req) {
         }
         if (error) {
             context.res = {status: 400, body: `Problem! ${error}`}
-            context.log.error(`${new Date().toUTCString()} Enqueue error: ${error}`);
+            context.log.error(`Enqueue error: ${error}`);
         } else {
             context.res = {status: 200, body: 'enqueued'};
 
             if (test) {
-                debugLog (`${new Date().toUTCString()} Enqueued a test notification: ${test}`)
+                debugLog (`Enqueued a test notification: ${test}`)
             } else {
-                debugLog (`${new Date().toUTCString()} Enqueued a notification`)
+                debugLog (`Enqueued a notification`)
             }
         }
     } 
@@ -150,7 +154,8 @@ async function enqueue(rawXML, test) {
 
     let ns;
     try {
-        const connString = process.env['SVC_BUS_CONNECTION_STRING'];
+        const connString = process.env['SVC_BUS_CONNECTION_STRING']
+            , queueName = process.env['SVC_BUS_QUEUE_NAME'];
         ns = ServiceBusClient.createFromConnectionString(connString);
         const client = ns.createQueueClient(queueName)
             , sender = client.createSender()
