@@ -12,7 +12,7 @@ an Azure Service Bus **Namespace**.
 1. In the left-hand navigation column,
    at the top, click **Create a resoure**.
 1. Search for **service** and then
-   select **~Service Bus** 
+   select **Service Bus** 
    See figure 1, below.
 
    ![Search for Service Bus](Azure.02.svc.search.png)

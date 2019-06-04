@@ -13,7 +13,7 @@ pull request. Thank you.
 1. [Create a Service Bus Namespace](docs/INSTALLATION_2_svc_bus_namespace.md)
 1. [Create a Service Bus Namespace Connection String](docs/INSTALLATION_3_svc_bus_connection_string.md)
 1. [Create a Service Bus Queue](docs/INSTALLATION_4_svc_bus_queue.md)
-1. [Create the Azure Function](docs/)INSTALLATION_5_function.md
+1. [Create the Azure Function](docs/INSTALLATION_5_function.md)
 
 ## 1. Azure account
 

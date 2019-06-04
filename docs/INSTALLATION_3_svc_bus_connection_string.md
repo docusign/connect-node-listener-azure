@@ -1,4 +1,4 @@
-# Create a Namespace access policy
+# Create a Shared Access Policy
 
 #### Summary
 Use this article to create a 
