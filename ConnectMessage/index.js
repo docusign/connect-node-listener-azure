@@ -149,8 +149,9 @@ function computeHmac(key, content) {
  * @param {boolean||integer} test 
  */
 async function enqueue(rawXML, test) {
+    if (!test) {test = ''} // always send a string
     let error = false;
-    if (test) {rawXML = ''}
+    if (test) {rawXML = ''} 
 
     let ns;
     try {

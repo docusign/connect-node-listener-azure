@@ -9,6 +9,6 @@
   "author": "DocuSign",
   "license": "MIT",
   "dependencies": {
-    "@azure/service-bus": "^1.0.2"
+    "@azure/service-bus": "^1.0.3"
   }
 }
