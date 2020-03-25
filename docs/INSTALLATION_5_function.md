@@ -79,7 +79,7 @@ Use this article to create an Azure
       `npm install`
 
       after downloading this repository to your 
-      development maching.
+      development machine.
 
    1. The directory / file layout used in this repository
       has been tested with the VS Code Azure plugin.
