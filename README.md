@@ -83,6 +83,7 @@ To deploy the needed infra using the Serverless framework follow [these instruct
       The connection string for a
       Shared access policy to the queue. 
    1. **SVC_BUS_QUEUE_NAME**: required. 
+   1. **JSON**: optional. If you will be using JSON Connect events (as opposed to XML), set this variable to `true`. Otherwise leave underfined.
 
 ## Testing
 Configure a DocuSign Connect subscription to send notifications to
