@@ -4,7 +4,7 @@ To deploy the infrastructure in your Azure subscription, follow the instructions
 
 ## Prerequisites
 
-Ensure you have [Serverless Framework](https://www.serverless.com/framework/docs/getting-started/) installed. You will also need the [Azure CLI](https://docs.microsoft.com/en-us/cli/azure/install-azure-cli) for the final setup step.
+Ensure you have [Serverless Framework](https://www.serverless.com/framework/docs/getting-started/) installed. You will also need the [Azure CLI](https://docs.microsoft.com/en-us/cli/azure/install-azure-cli) for the final setup step. Be sure to first run `npm i` in current directory.
 
 ## Steps:
  1) Define the following environment variables:
