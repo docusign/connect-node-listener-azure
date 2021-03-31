@@ -1,3 +1,9 @@
+ /**
+ * @file index.js -- Azure Function Node.js function.
+ * This function receives a DocuSign Connect notification message
+ * and enqueues it to an Azure Service Bus queue.
+ **/
+
 'use strict';
 
 const crypto = require('crypto')
