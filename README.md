@@ -30,6 +30,10 @@ could be written in a different language.
 Short form instructions are below. 
 [Long form](INSTALLATION.md) instructions are also available.
 
+## Infrastructure
+
+To deploy the needed infra using the Serverless framework follow [these instructions](connectMessage/INFRA.md) below. 
+
 ### Azure Service Bus Namespace
 1. Provision an 
    [Azure Service Bus](https://azure.microsoft.com/en-us/services/service-bus/) **Namespace**.
