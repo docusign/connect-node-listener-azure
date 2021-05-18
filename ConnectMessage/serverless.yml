@@ -21,7 +21,7 @@ provider:
   name: azure
   region: ${env:LOCATION}
   runtime: nodejs10
-  prefix: "sample"  # prefix of generated resource name
+  prefix: "example"  # prefix of generated resource name
   subscriptionId: ${env:SUB_ID}
 
   environment: # these will be created as application settings
