@@ -84,11 +84,11 @@ module.exports.connectNotificationMessage = async function (context, req) {
   
   if (test || hmacPassed) {
       // Step 2. Store in queue
-      let  error = await enqueue (rawBody, test);
+      let  error = await enqueue (body, test);
       if (error) {
           // Wait 25 sec and then try again
           await sleep(25000);
-          error = await enqueue (rawBody, test);
+          error = await enqueue (body, test);
       }
       if (error) {
           context.res = {status: 400, body: `Problem! ${error}`}
