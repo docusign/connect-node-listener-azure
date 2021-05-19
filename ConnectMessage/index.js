@@ -162,7 +162,7 @@ async function enqueue(rawBody, test) {
       ns = ServiceBusClient.createFromConnectionString(connString);
       const client = ns.createQueueClient(queueName)
           , sender = client.createSender()
-          , message = {body: {test: test, xml: rawBody}}
+          , message = {body: {test: test, payload: rawBody}}
           ;
       await sender.send(message);
       await client.close();
