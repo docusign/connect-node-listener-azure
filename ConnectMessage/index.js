@@ -84,11 +84,11 @@ module.exports.connectNotificationMessage = async function (context, req) {
   
   if (test || hmacPassed) {
       // Step 2. Store in queue
-      let  error = await enqueue (body, test);
+      let  error = await enqueue (body, test, req.headers['content-type'].toString());
       if (error) {
           // Wait 25 sec and then try again
           await sleep(25000);
-          error = await enqueue (body, test);
+          error = await enqueue (body, test, req.headers['content-type'].toString());
       }
       if (error) {
           context.res = {status: 400, body: `Problem! ${error}`}
@@ -149,8 +149,9 @@ function computeHmac(key, content) {
 * 
 * @param {string} rawBody 
 * @param {boolean||integer} test 
+* @param {string} contentType
 */
-async function enqueue(rawBody, test) {
+async function enqueue(rawBody, test, contentType) {
   if (!test) {test = ''} // always send a string
   let error = false;
   if (test) {rawBody = ''} 
@@ -162,7 +163,7 @@ async function enqueue(rawBody, test) {
       ns = ServiceBusClient.createFromConnectionString(connString);
       const client = ns.createQueueClient(queueName)
           , sender = client.createSender()
-          , message = {body: {test: test, payload: rawBody}}
+          , message = {body: {test: test, contentType: contentType ,payload: rawBody}}
           ;
       await sender.send(message);
       await client.close();
