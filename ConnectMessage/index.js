@@ -46,13 +46,19 @@ module.exports.connectNotificationMessage = async function (context, req) {
 
   // Check HMAC and enqueue. Allow for test messages
   const test = req.query.test ? req.query.test : false
-      , rawXML = req.body
+      , rawBody = req.body
       , hmac1 = process.env['HMAC_1']
       , hmacConfigured = hmac1;
 
-  let rawXML2 = JSON.stringify(rawXML)
-  debugLog(`rawXML: ${rawXML2}`)
-  debugLog(`hmac1: ${hmac1}`)
+  let body;
+  debugLog(`content-type is ${req.headers['content-type']}`)
+
+  if (req.headers['content-type'].toString().includes('text/xml')) {
+      body = rawBody
+  } else if (req.headers['content-type'].toString().includes('application/json')) {
+      body = JSON.stringify(rawBody)
+  }
+  
   let hmacPassed;
   if (!test && hmacConfigured) {
       // Not a test:
@@ -61,8 +67,8 @@ module.exports.connectNotificationMessage = async function (context, req) {
       const authDigest = req.headers['x-authorization-digest']
           , hmacSig1 = req.headers['x-docusign-signature-1']
           ;
-      debugLog(`hmacSig1: ${hmacSig1}`)
-      hmacPassed = checkHmac(hmac1, rawXML, authDigest, hmacSig1)
+      
+      hmacPassed = checkHmac(hmac1, body, authDigest, hmacSig1)
       if (!hmacPassed) {
           context.log.error(`HMAC did not pass!! HMAC Sig 1: ${hmacSig1}`);
           context.res = {status: 401, body: "Bad HMAC: unauthorized!"};
@@ -78,11 +84,11 @@ module.exports.connectNotificationMessage = async function (context, req) {
   
   if (test || hmacPassed) {
       // Step 2. Store in queue
-      let  error = await enqueue (rawXML, test);
+      let  error = await enqueue (body, test, req.headers['content-type'].toString());
       if (error) {
           // Wait 25 sec and then try again
           await sleep(25000);
-          error = await enqueue (rawXML, test);
+          error = await enqueue (body, test, req.headers['content-type'].toString());
       }
       if (error) {
           context.res = {status: 400, body: `Problem! ${error}`}
@@ -102,12 +108,12 @@ module.exports.connectNotificationMessage = async function (context, req) {
 /**
  * 
  * @param {string} key1: The HMAC key for signature 1
- * @param {string} rawXML: the request body of the notification POST 
+ * @param {string} rawBody: the request body of the notification POST 
  * @param {string} authDigest: The HMAC signature algorithmn used
  * @param {string} hmacSig1: The HMAC Signature number 1
  * @returns {boolean} sigGood: Is the signatures good?
  */
-function checkHmac (key1, rawXML, authDigest, hmacSig1) {   
+function checkHmac (key1, rawBody, authDigest, hmacSig1) {   
   const authDigestExpected = 'HMACSHA256'
       , correctDigest = authDigestExpected === authDigest;
   if (!correctDigest) {return false}
@@ -118,7 +124,7 @@ function checkHmac (key1, rawXML, authDigest, hmacSig1) {
   // the secrets for the specific account.
   //
   // For this example, the key is supplied by the caller
-  const sig1good = hmacSig1 === computeHmac(key1, rawXML);
+  const sig1good = hmacSig1 === computeHmac(key1, rawBody);
   return sig1good
 }
 
@@ -141,13 +147,14 @@ function computeHmac(key, content) {
 * The enqueue function adds the xml to the queue.
 * If test is true then a test notification is sent. 
 * 
-* @param {string} rawXML 
+* @param {string} rawBody 
 * @param {boolean||integer} test 
+* @param {string} contentType
 */
-async function enqueue(rawXML, test) {
+async function enqueue(rawBody, test, contentType) {
   if (!test) {test = ''} // always send a string
   let error = false;
-  if (test) {rawXML = ''} 
+  if (test) {rawBody = ''} 
 
   let ns;
   try {
@@ -156,7 +163,7 @@ async function enqueue(rawXML, test) {
       ns = ServiceBusClient.createFromConnectionString(connString);
       const client = ns.createQueueClient(queueName)
           , sender = client.createSender()
-          , message = {body: {test: test, xml: rawXML}}
+          , message = {body: {test: test, contentType: contentType ,payload: rawBody}}
           ;
       await sender.send(message);
       await client.close();
