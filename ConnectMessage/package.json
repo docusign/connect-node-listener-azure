@@ -9,9 +9,9 @@
   "author": "DocuSign",
   "license": "MIT",
   "dependencies": {
-    "@azure/service-bus": "^1.1.10"
+    "@azure/service-bus": "^7.2.0"
   },
   "devDependencies": {
-    "serverless-azure-functions": "^2.0.0"
+    "serverless-azure-functions": "^2.1.0"
   }
 }
