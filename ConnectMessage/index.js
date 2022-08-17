@@ -160,13 +160,12 @@ async function enqueue(rawBody, test, contentType) {
   try {
       const connString = process.env['SVC_BUS_CONNECTION_STRING']
           , queueName = process.env['SVC_BUS_QUEUE_NAME'];
-      ns = ServiceBusClient.createFromConnectionString(connString);
-      const client = ns.createQueueClient(queueName)
-          , sender = client.createSender()
-          , message = {body: {test: test, contentType: contentType ,payload: rawBody}}
-          ;
-      await sender.send(message);
-      await client.close();
+          let serviceBusClient = new ServiceBusClient(connString);
+          const sender = serviceBusClient.createSender(queueName)
+              , message = {body: {test: test, contentType: contentType ,payload: rawBody}}
+              ;
+          await sender.sendMessages(message);
+          await sender.close();
   }
   catch (e) {
       error = e

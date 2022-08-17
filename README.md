@@ -68,7 +68,7 @@ To deploy the needed infra using the Serverless framework follow [these instruct
 
 1. Download/clone this repo to a local directory.
 1. Install Node.js version 8.x or later.
-1. In the project's directory: `npm install`
+1. Navigate to `ConnectMessage` folder and run `npm install`
 1. Use the VS Code or other tools suggested by 
    Azure to upload the directory to your Azure function.
 
