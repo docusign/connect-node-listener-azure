@@ -39,10 +39,9 @@ Use this article to create an Azure
       both the Windows and Linux settings.
    1. **Hosting Plan**: Recommendation: use the 
       **Consumption Plan**.
-   1. **Runtime Stack**: Use **JavaScript**.
-   1. **Storage**: Recommendation: use the 
-      form's suggested
-      **new** storage option.
+   1. **Runtime Stack**: Use **Node.js**.
+   1. **Publish**: Use **Code**. 
+
    
    Click the **Create** button. See figure 2:
 
