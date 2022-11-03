@@ -68,7 +68,10 @@ To deploy the needed infra using the Serverless framework follow [these instruct
 
 1. Download/clone this repo to a local directory.
 1. Install Node.js version 8.x or later.
-1. Navigate to `ConnectMessage` folder and run `npm install`
+1. Navigate to `ConnectMessage` folder and run `npm install`. 
+
+   > **Note**: If the `package-lock.json` contains references to packages that are inaccessible, delete this file and run command again.
+
 1. Use the VS Code or other tools suggested by 
    Azure to upload the directory to your Azure function.
 
@@ -83,6 +86,8 @@ To deploy the needed infra using the Serverless framework follow [these instruct
       The connection string for a
       Shared access policy to the queue. 
    1. **SVC_BUS_QUEUE_NAME**: required. 
+
+   > **Note:** Make sure Azure Authentication is disabled for your function app, otherwise it may not receive any messages.
 
 ## Testing
 Configure a DocuSign Connect subscription to send notifications to
