@@ -73,12 +73,10 @@ Use this article to create an Azure
    Notes:
 
    1. Install and upload the Node.js libraries as
-      part of the package. To do so, run
-
-      `npm install`
-
-      after downloading this repository to your 
+      part of the package. Navigate to `ConnectMessage` folder and run `npm install` after downloading this repository to your 
       development machine.
+      
+      > **Note**: If the `package-lock.json` contains references to packages that are inaccessible, delete this file and run command again.
 
    1. The directory / file layout used in this repository
       has been tested with the VS Code Azure plugin.
@@ -91,7 +89,9 @@ Use this article to create an Azure
       * HMAC_1 (optional) the HMAC secret for HMAC 
         signature 1.
       * SVC_BUS_CONNECTION_STRING 
-      * SVC_BUS_QUEUE_NAME
+      * SVC_BUS_QUEUE_NAME  
+      
+      > **Note:** Make sure Azure Authentication is disabled for your function app, otherwise it may not receive any messages.
 
 ## Next steps
 
